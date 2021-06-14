@@ -1,0 +1,15 @@
+{
+    "env": {
+        "node": true,
+        "es2020": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "extends": ["eslint:recommended"],
+    "rules": {
+        "require-jsdoc": "off",
+        "no-undef": "off"
+    }
+}

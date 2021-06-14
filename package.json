@@ -6,12 +6,16 @@
     "license": "GPL-3.0",
     "main": "src/index.ts",
     "scripts": {
-        "build": "yarn spack"
+        "build": "spack",
+        "lint": "eslint . --ext js",
+        "prettier": "prettier **/{*.{js,json},.*.json}"
     },
     "dependencies": {},
     "devDependencies": {
         "@swc/cli": "^0.1.46",
         "@swc/core": "^1.2.60",
-        "blockbench-types": "^3.8.0"
+        "blockbench-types": "^3.8.0",
+        "eslint": "^7.28.0",
+        "prettier": "^2.3.1"
     }
 }

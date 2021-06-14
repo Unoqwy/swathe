@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
         "lib": ["es2020"],
-        "typeRoots": ["./node_modules/@types", "./node_modules/blockbench-types"]
+        "typeRoots": [
+            "./node_modules/@types",
+            "./node_modules/blockbench-types"
+        ]
     }
 }
