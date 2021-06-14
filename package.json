@@ -1,0 +1,17 @@
+{
+    "name": "blockbench-mouseless",
+    "version": "0.1.0",
+    "description": "Add shortcuts to Blockbench to fully take advantage of the keyboard",
+    "author": "Unoqwy <julien.qwy@gmail.com>",
+    "license": "GPL-3.0",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "yarn spack"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@swc/cli": "^0.1.46",
+        "@swc/core": "^1.2.60",
+        "blockbench-types": "^3.8.0"
+    }
+}
