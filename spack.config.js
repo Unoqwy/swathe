@@ -22,6 +22,10 @@ module.exports = require("@swc/core/spack").config({
                 constModules: {
                     globals: {
                         "@package-info": packageMetaData,
+                        "bb-types": {
+                            /* eslint-disable @typescript-eslint/naming-convention */
+                            Plugin: "Plugin",
+                        },
                     },
                 },
             },

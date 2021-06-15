@@ -1,4 +1,5 @@
 import { author, description } from "@package-info";
+import { Plugin } from "bb-types";
 
 function removeFromArray<T>(elt: T, array: T[]): boolean {
     const eltIndex = array.indexOf(elt);
