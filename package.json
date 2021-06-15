@@ -6,9 +6,11 @@
     "license": "GPL-3.0",
     "main": "src/index.ts",
     "scripts": {
-        "build": "spack",
+        "tsc-check": "tsc --noEmit --skipLibCheck",
+        "bundle": "spack",
         "lint": "eslint . --ext js,ts",
-        "style": "yarn prettier . -w && yarn lint"
+        "style": "yarn prettier . -w && yarn lint",
+        "dev": "yarn tsc-check && yarn style && yarn bundle"
     },
     "dependencies": {},
     "devDependencies": {
