@@ -1,3 +1,5 @@
+import { author, description } from "@package-info";
+
 function removeFromArray<T>(elt: T, array: T[]): boolean {
     const eltIndex = array.indexOf(elt);
     if (eltIndex != -1) {
@@ -53,11 +55,11 @@ function sidebarAction(id: string, sides: string[], changeState: boolean | "togg
 Plugin.register("mouseless", {
     icon: "keyboard",
     title: "Blockbench Mouseless",
-    author: "Unoqwy",
-    description: "Add shortcuts to fully take advantage of the keyboard",
+    author: author,
+    description: description,
     variant: "both",
 
-    onload() {
+    onload: () => {
         sidebarAction("toggle_left_sidebar", ["left"], "toggle", {
             name: "Toggle Left Sidebar",
             icon: "chevron-left",
@@ -75,7 +77,7 @@ Plugin.register("mouseless", {
             icon: "compress-arrows",
         });
     },
-    onunload() {
+    onunload: () => {
         InjectionStore.unhook();
     },
 });

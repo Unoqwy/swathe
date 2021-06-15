@@ -2,7 +2,7 @@
     "name": "blockbench-mouseless",
     "version": "0.1.0",
     "description": "Add shortcuts to Blockbench to fully take advantage of the keyboard",
-    "author": "Unoqwy <julien.qwy@gmail.com>",
+    "author": "Unoqwy",
     "license": "GPL-3.0",
     "main": "src/index.ts",
     "scripts": {

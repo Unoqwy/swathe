@@ -5,6 +5,10 @@
             "./types",
             "./node_modules/@types",
             "./node_modules/blockbench-types"
-        ]
+        ],
+        "resolveJsonModule": true,
+        "paths": {
+            "@package-info": ["./package.json"]
+        }
     }
 }
