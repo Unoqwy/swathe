@@ -33,7 +33,7 @@ namespace InjectionStore {
     }
 }
 
-function sidebarAction(id: string, sides: string[], change_state: boolean | "toggle", opts: Partial<ActionOptions>) {
+function sidebarAction(id: string, sides: string[], changeState: boolean | "toggle", opts: Partial<ActionOptions>) {
     InjectionStore.registerAction(
         new Action(id, {
             ...opts,
@@ -42,8 +42,7 @@ function sidebarAction(id: string, sides: string[], change_state: boolean | "tog
                 sides
                     .map(side => `show_${side}_bar`)
                     .forEach(side => {
-                        const new_state = change_state == "toggle" ? !Prop[side] : change_state;
-                        Prop[side] = new_state;
+                        Prop[side] = changeState == "toggle" ? !Prop[side] : changeState;
                     });
                 resizeWindow();
             },
