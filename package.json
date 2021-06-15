@@ -7,9 +7,8 @@
     "main": "src/index.ts",
     "scripts": {
         "build": "spack",
-        "lint": "eslint . --ext ts",
-        "prettier": "prettier **/{*.{ts,json},.*.json}",
-        "style": "yarn prettier -w && yarn lint"
+        "lint": "eslint . --ext js,ts",
+        "style": "yarn prettier . -w && yarn lint"
     },
     "dependencies": {},
     "devDependencies": {
