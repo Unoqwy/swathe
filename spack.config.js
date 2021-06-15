@@ -3,7 +3,7 @@ const { config } = require("@swc/core/spack");
 
 module.exports = config({
     entry: {
-        mouseless: path.join(__dirname, "src", "index.js"),
+        mouseless: path.join(__dirname, "src", "index.ts"),
     },
     output: {
         path: path.join(__dirname, "dist"),
@@ -11,7 +11,7 @@ module.exports = config({
     options: {
         jsc: {
             parser: {
-                syntax: "ecmascript",
+                syntax: "typescript",
             },
             target: "es5",
         },
