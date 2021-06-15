@@ -1,4 +1,6 @@
 import { author, description } from "@package-info";
+import { cssSource } from "@bundle";
+
 import { Plugin } from "bb-types";
 import { Mouseless } from "./mouseless";
 
@@ -12,6 +14,8 @@ Plugin.register("mouseless", {
     variant: "both",
 
     onload: () => {
+        Mouseless.hook(cssSource);
+
         ui.load();
     },
     onunload: () => {

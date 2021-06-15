@@ -32,4 +32,14 @@ export function load() {
         name: "Show both sidebars",
         icon: "unfold_less",
     });
+
+    Mouseless.createAction("toggle_menubar", {
+        name: "Toggle Menu Bar",
+        icon: "menu_open",
+        category: "view",
+        click: () => {
+            $("header").toggle();
+            $("#page_wrapper").toggleClass("h-100-override");
+        },
+    });
 }

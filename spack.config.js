@@ -1,10 +1,19 @@
 const path = require("path");
+const sass = require("sass");
+const formatTime = require("pretty-ms");
 
 const packageMetaData = Object.fromEntries(
     Object.entries(require("./package.json"))
         .filter(([_, val]) => typeof val === "string")
         .map(([key, val]) => [key, JSON.stringify(val)])
 );
+
+const sassResult = sass.renderSync({
+    file: "./css/index.scss",
+    outputStyle: "compressed",
+    sourceMap: false,
+});
+console.log(`CSS done: ${formatTime(sassResult.stats.duration, { secondsDecimalDigits: 2 })}`);
 
 module.exports = require("@swc/core/spack").config({
     entry: {
@@ -22,6 +31,9 @@ module.exports = require("@swc/core/spack").config({
                 constModules: {
                     globals: {
                         "@package-info": packageMetaData,
+                        "@bundle": {
+                            cssSource: JSON.stringify(sassResult.css.toString()),
+                        },
                         "bb-types": {
                             /* eslint-disable @typescript-eslint/naming-convention */
                             Plugin: "Plugin",
@@ -32,6 +44,6 @@ module.exports = require("@swc/core/spack").config({
             target: "es2016",
         },
         minify: true,
-        sourceMaps: "inline",
+        sourceMaps: false,
     },
 });
