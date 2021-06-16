@@ -22,7 +22,6 @@ export namespace Mouseless {
     export function postInit() {
         Object.values(Toolbars).forEach(toolbar => {
             if ((toolbar as any).postload) {
-                console.log(toolbar);
                 toolbar.update();
             }
         });
