@@ -1,4 +1,4 @@
-export function removeFromArray<T>(elt: T, array: T[]): boolean {
+export function removeFromArray<T>(array: T[], elt: T): boolean {
     const eltIndex = array.indexOf(elt);
     if (eltIndex != -1) {
         array.splice(eltIndex, 1);

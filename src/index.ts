@@ -11,12 +11,16 @@ Plugin.register("mouseless", {
     title: "Blockbench Mouseless",
     author: author,
     description: description,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    min_version: "3.9",
     variant: "both",
 
     onload: () => {
         Mouseless.hook(cssSource);
 
         ui.load();
+
+        Mouseless.postInit();
     },
     onunload: () => {
         Mouseless.unhook();

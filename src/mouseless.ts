@@ -7,11 +7,7 @@ export namespace Mouseless {
     const actions: Action[] = [];
 
     export function createAction(id: string, opts: ActionOptions) {
-        registerAction(new Action(id, opts));
-    }
-
-    export function registerAction(action: Action) {
-        actions.push(action);
+        actions.push(new Action(id, opts));
     }
 
     export function hook(cssSource?: string) {
@@ -23,19 +19,62 @@ export namespace Mouseless {
         }
     }
 
+    export function postInit() {
+        Object.values(Toolbars).forEach(toolbar => {
+            if ((toolbar as any).postload) {
+                console.log(toolbar);
+                toolbar.update();
+            }
+        });
+    }
+
     export function unhook() {
         styleElement.remove();
-        actions.forEach(removeAction);
+        actions.forEach(unloadAction);
     }
 }
 
-function removeAction(action: Action) {
-    if (removeFromArray(action, Keybinds.actions)) {
-        const category = (action as any).category;
+/**
+ * Unload an action but avoid calling save to keep it in storage.
+ * This allows for plugin reloading and upadting by preventing leftovers from previous iter
+ * yet keeping the user's toolbars as they are.
+ */
+function unloadAction(action: any) {
+    delete BarItems[action.id];
+
+    for (const toolbar of action.toolbars) {
+        let idx = 0;
+        while (idx < toolbar.children.length) {
+            const item = toolbar.children[idx];
+            if (item === action || item.id === action) {
+                toolbar.children.splice(idx, 1);
+                if (removeFromArray(item.toolbars, toolbar)) {
+                    const position = parseInt(
+                        Object.entries(toolbar.positionLookup).find(([_, item]) => item === action)[0]
+                    );
+                    if (position !== undefined) {
+                        if (toolbar.postload === undefined) {
+                            toolbar.postload = [];
+                        }
+                        toolbar.postload.push([action.id, position]);
+                    }
+                }
+            } else {
+                idx++;
+            }
+        }
+        toolbar.update();
+    }
+
+    if (removeFromArray(Keybinds.actions, action)) {
+        const category = action.category;
         const structCategoryActions = Keybinds.structure[category].actions;
-        removeFromArray(action, structCategoryActions);
+        removeFromArray(structCategoryActions, action);
         if (structCategoryActions.length == 0) {
             delete Keybinds.structure[category];
         }
     }
+
+    Object.keys(action).forEach(prop => delete action[prop]);
+    action.id = "DISABLED";
 }

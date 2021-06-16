@@ -6,5 +6,6 @@ declare module "bb-types" {
 }
 
 declare const Prop: any;
+declare const Toolbars: { [name: string]: Toolbar };
 
 declare function resizeWindow(event?: any): void;
