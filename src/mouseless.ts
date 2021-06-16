@@ -35,7 +35,7 @@ export namespace Mouseless {
 
 /**
  * Unload an action but avoid calling save to keep it in storage.
- * This allows for plugin reloading and upadting by preventing leftovers from previous iter
+ * This allows for plugin reloading and updating by preventing leftovers from previous state
  * yet keeping the user's toolbars as they are.
  */
 function unloadAction(action: any) {

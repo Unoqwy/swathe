@@ -35,7 +35,7 @@ module.exports = require("@swc/core/spack").config({
                             cssSource: JSON.stringify(sassResult.css.toString()),
                         },
                         "bb-types": {
-                            /* eslint-disable @typescript-eslint/naming-convention */
+                            /* eslint-disable-next-line @typescript-eslint/naming-convention */
                             Plugin: "Plugin",
                         },
                     },
