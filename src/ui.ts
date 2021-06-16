@@ -15,7 +15,22 @@ function sidebarAction(id: string, sides: string[], changeState: boolean | "togg
     } as ActionOptions);
 }
 
+function toggleMenubar(visible?: boolean) {
+    if (visible !== undefined) {
+        $("header").toggle(visible);
+    } else {
+        $("header").toggle();
+    }
+    const hidden = !$("header").is(":visible");
+    $("#page_wrapper").toggleClass("h-100-override", hidden);
+    Mouseless.storage.set("menubar_hidden", hidden ? true : undefined);
+}
+
 export function load() {
+    if (Mouseless.storage.get("menubar_hidden")) {
+        toggleMenubar(false);
+    }
+
     sidebarAction("toggle_left_sidebar", ["left"], "toggle", {
         name: "Toggle Left Sidebar",
         icon: "chevron_left",
@@ -37,9 +52,6 @@ export function load() {
         name: "Toggle Menu Bar",
         icon: "menu_open",
         category: "view",
-        click: () => {
-            $("header").toggle();
-            $("#page_wrapper").toggleClass("h-100-override");
-        },
+        click: () => toggleMenubar(),
     });
 }
