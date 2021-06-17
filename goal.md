@@ -29,7 +29,22 @@ Possible solutions :
 - rename move to go or shift, but the terminology sounds weird
 - use `M` to mark because it can be achieved with `50%` anyway
 
+### Macros
+
 Now the big question is should mouseless support macros?
+
+### Config and File Format
+
+Configuration file will be a `.mouselessrc` or `$HOME/.config/Blockbench/mouseless.mlv`.
+
+This will introduce a custom file format, MLV (MouseLess Vi).
+The syntax will resemble Vimscript with less features but some keywords and options are yet to be determined.
+
+Thoughts:
+
+`emap`, `pmap`, `amap` - Edit, Paint, Animate keymaps?
+
+`imap` change native inputs editing behavior? not sure it is worth it
 
 ## Keymap layers
 
@@ -39,6 +54,7 @@ A naive approach would be to completely replace keybindings with vim-like, which
 Keybindings configuration useless but since vim-like keybindings will have their own config file, it would be fine.  
 A better approach would be to implement keymap layers which are basically an enhanced version of
 "switch between regular and vim-like keybindings" and would allow multiple layers of regular keybindings as well.
-This would inject a "Layer" dropdown in native Keybindings dialog.
+This would inject a "Layer" dropdown in native Keybindings dialog, or [more likely] deprecate the native dialog and create a custom one.
 
-The most likely option to go with at first is a simple toggle between regular and vim with-like keybindings. Then maybe implement actual layers later.
+The most likely option to go with at first is a simple toggle between regular and vim-like keybindings.
+Then maybe implement actual layers later, but I'm not entierely conviced of the usefulness of it.
