@@ -1,16 +1,14 @@
 {
-    "name": "blockbench-mouseless",
-    "version": "0.1.0",
-    "description": "Add shortcuts to Blockbench to fully take advantage of the keyboard",
-    "author": "Unoqwy",
-    "license": "GPL-3.0",
-    "main": "src/index.ts",
+    "name": "swathe",
+    "description": "Collection of Blockbench plugins",
+    "private": true,
     "scripts": {
         "tsc-check": "tsc --noEmit --skipLibCheck",
-        "bundle": "spack",
         "lint": "eslint . --ext js,ts",
         "style": "yarn prettier . -w && yarn lint",
-        "dev": "yarn tsc-check && yarn style && yarn bundle"
+        "bundle": "rm -rf dist && spack && rm dist/*.map",
+        "bundle_post": "for i in dist/*.js; do echo -e \"(function(){$(cat $i)})();\" > $i; done",
+        "dev": "yarn tsc-check && yarn style && yarn bundle && yarn bundle_post"
     },
     "dependencies": {},
     "devDependencies": {

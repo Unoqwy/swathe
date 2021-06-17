@@ -1,5 +1,7 @@
 // Some more type definitions for Blockbench
 
+/// <reference types="./plugin.d.ts"/>
+
 // workaround to get typescript to stop complaining about duplicate declarations and keep compat with 3.8
 declare module "bb-types" {
     class Plugin extends BBPlugin {}

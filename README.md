@@ -1,8 +1,20 @@
-# blockbench-mouseless
+# Swathe - A collection of Blockbench plugins
 
-Stage: Not really started yet. The README will be updated when the project reaches a "kind of useful" state.
+Stage: Draft. This will be updated when the project reaches a usable state.
 
-## Installation
+## Plugins
 
-A bundled version of the plugin is automatically deployed on the [dist](https://github.com/Unoqwy/blockbench-mouseless/tree/dist) branch.
-To install the plugin, you can therefore go to `Plugins -> Load Plugin from URL` and paste [this link](https://cdn.jsdelivr.net/gh/Unoqwy/blockbench-mouseless@dist/mouseless.js).
+A bundled version of each plugin is automatically deployed on the [dist](https://github.com/Unoqwy/blockbench-mouseless/tree/dist) branch.
+
+TOOD: table with plugins/desc/installation  
+automatically generate this section from plugins' packages? maybe as PLUGIN.md?
+
+## Project Structure
+
+### Why a monorepo
+
+The benefits of using a monorepo for Swathe include:
+
+- Share the same lints and CI jobs without having duplicated code over multiple repos
+- Easier to maintain, when changes are made to the core, it instantly reflects on plugins
+- Centralised packing and distribution

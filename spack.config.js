@@ -17,7 +17,7 @@ console.log(`CSS done: ${formatTime(sassResult.stats.duration, { secondsDecimalD
 
 module.exports = require("@swc/core/spack").config({
     entry: {
-        mouseless: path.join(__dirname, "src", "index.ts"),
+        stretch: path.join(__dirname, "plugins", "stretch", "index.ts"),
     },
     output: {
         path: path.join(__dirname, "dist"),

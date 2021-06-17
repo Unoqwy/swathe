@@ -1,7 +1,29 @@
-import { Mouseless } from "./mouseless";
+import { cssSource } from "@bundle";
+
+import { SwathePlugin } from "../../core/plugin";
+import { Storage } from "../../core/storage";
+
+const plugin = new SwathePlugin(
+    "stretch",
+    {
+        icon: "aspect_ratio",
+        title: "Stretch",
+        author: "Unoqwy",
+        description: "Add missing actions to control screen space",
+        variant: "both",
+
+        onload: load,
+    },
+    {
+        storage: Storage.load("swathe_stretch"),
+    }
+);
+plugin.register(true, {
+    stylesheet: cssSource,
+});
 
 function sidebarAction(id: string, sides: string[], changeState: boolean | "toggle", opts: Partial<ActionOptions>) {
-    Mouseless.createAction(id, {
+    plugin.createAction(id, {
         ...opts,
         category: "view",
         click: () => {
@@ -23,11 +45,11 @@ function toggleMenubar(visible?: boolean) {
     }
     const hidden = !$("header").is(":visible");
     $("#page_wrapper").toggleClass("h-100-override", hidden);
-    Mouseless.storage.set("menubar_hidden", hidden ? true : undefined);
+    plugin.storage.set("menubar_hidden", hidden ? true : undefined);
 }
 
-export function load() {
-    if (Mouseless.storage.get("menubar_hidden")) {
+function load() {
+    if (plugin.storage.get("menubar_hidden")) {
         toggleMenubar(false);
     }
 
@@ -48,7 +70,7 @@ export function load() {
         icon: "unfold_less",
     });
 
-    Mouseless.createAction("toggle_menubar", {
+    plugin.createAction("toggle_menubar", {
         name: "Toggle Menu Bar",
         icon: "menu_open",
         category: "view",
