@@ -15,6 +15,14 @@
             "options": {
                 "tabWidth": 2
             }
+        },
+        {
+            "files": "*.md",
+            "options": {
+                "printWidth": 100,
+                "tabWidth": 1,
+                "embeddedLanguageFormatting": "off"
+            }
         }
     ]
 }
