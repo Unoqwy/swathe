@@ -1,3 +1,3 @@
-declare module "@bundle" {
-    declare const cssSource: string;
+declare module "@stylesheets" {
+    const stretchStylesheet: string;
 }

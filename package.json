@@ -7,9 +7,8 @@
         "tsc-check": "tsc --noEmit --skipLibCheck",
         "lint": "eslint . --ext js,ts",
         "style": "yarn prettier . -w && yarn lint",
-        "bundle": "rm -rf dist && spack && rm dist/*.map",
-        "bundle_post": "for i in dist/*.js; do echo -e \"(function(){$(cat $i)})();\" > $i; done",
-        "dev": "yarn tsc-check && yarn style && yarn bundle && yarn bundle_post"
+        "bundle": "rm -rf ./dist && spack && rm ./dist/*.map && node ./scripts/post-bundle.js",
+        "dev": "yarn tsc-check && yarn style && yarn bundle"
     },
     "dependencies": {},
     "devDependencies": {

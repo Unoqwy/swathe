@@ -1,4 +1,4 @@
-import { cssSource } from "@bundle";
+import { stretchStylesheet } from "@stylesheets";
 
 import { SwathePlugin } from "../../core/plugin";
 
@@ -46,7 +46,7 @@ const plugin = new SwathePlugin(
     }
 );
 plugin.register(true, {
-    stylesheet: cssSource,
+    stylesheet: stretchStylesheet,
 });
 
 function sidebarAction(id: string, sides: string[], changeState: boolean | "toggle", opts: Partial<ActionOptions>) {
