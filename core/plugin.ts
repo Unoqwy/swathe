@@ -8,7 +8,7 @@ const aboutFooter = `This plugin is part of the <a href='${repository}'>Swathe</
 
 type PluginInitOptions = {
     /** Whether the plugin requires a storage */
-    storage?: true;
+    storage?: boolean;
 };
 
 type PluginHookOptions = {
@@ -46,7 +46,7 @@ export class SwathePlugin {
         options.about = (options.about ? options.about + "<br/>" : "") + aboutFooter;
         this.options = options;
         if (initOpts?.storage) {
-            Storage.load("swathe_" + id);
+            this.storage = Storage.load("swathe_" + id);
         }
     }
 
