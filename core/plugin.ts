@@ -1,10 +1,14 @@
+import { repository } from "@package-info";
 import { Plugin } from "bb-types";
 import { injectStylesheet } from "./inject";
 import { Storage } from "./storage";
 import { unloadAction } from "./unstable";
 
+const aboutFooter = `This plugin is part of the <a href='${repository}'>Swathe</a> plugin collection.`;
+
 type PluginInitOptions = {
-    storage?: Storage;
+    /** Whether the plugin requires a storage */
+    storage?: true;
 };
 
 type PluginHookOptions = {
@@ -39,8 +43,11 @@ export class SwathePlugin {
         }
 
         this.id = id;
+        options.about = (options.about ? options.about + "<br/>" : "") + aboutFooter;
         this.options = options;
-        this.storage = initOpts?.storage;
+        if (initOpts?.storage) {
+            Storage.load("swathe_" + id);
+        }
     }
 
     register(autoHook: boolean = true, hookOpts?: PluginHookOptions) {
@@ -74,7 +81,7 @@ export class SwathePlugin {
 
     hook(opts?: PluginHookOptions) {
         if (opts?.stylesheet) {
-            injectStylesheet(`swathe-plugin-${this.id}`, opts.stylesheet);
+            injectStylesheet(`swathe-css-${this.id.replaceAll("_", "-")}`, opts.stylesheet);
         }
     }
 

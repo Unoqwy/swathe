@@ -1,6 +1,7 @@
 {
     "name": "swathe",
     "description": "Collection of Blockbench plugins",
+    "repository": "https://github.com/Unoqwy/swathe",
     "private": true,
     "scripts": {
         "tsc-check": "tsc --noEmit --skipLibCheck",
