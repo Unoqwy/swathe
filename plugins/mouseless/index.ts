@@ -142,7 +142,7 @@ class MLV {
             }
             input.appendToTrail(key);
         } else if (key !== "<" && key !== ">" && (/^[\x22-\x7F]$/.test(key) || specialKeys.includes(key))) {
-            // \x22: -> exlamation mark ignore, and space (\x21) is a special char
+            // \x22.. -> exlamation mark (\x21) ignore, and space (\x20) is a special char
             if (input.at === InputStackStep.MotionCount) {
                 const motionCount = parseFloat(input.trail);
                 if (!isNaN(motionCount)) {
