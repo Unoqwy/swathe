@@ -1,5 +1,4 @@
 import { repository } from "@package-info";
-import { Plugin } from "bb-types";
 import { injectStylesheet } from "./inject";
 import { Storage } from "./storage";
 import { unloadAction } from "./unstable";
@@ -61,7 +60,7 @@ export class SwathePlugin {
             this.registerEvent("onload", { before: () => this.hook(hookOpts), after: this.postInit.bind(this) });
             this.registerEvent("onunload", { after: this.unhook.bind(this) });
         }
-        Plugin.register(this.id, this.options);
+        BBPlugin.register(this.id, this.options);
     }
 
     private registerEvent(event: FunctionProperties<BBPluginOptions>, opts?: RegisterEventOptions) {

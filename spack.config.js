@@ -64,12 +64,6 @@ module.exports = require("@swc/core/spack").config({
                     globals: {
                         "@package-info": packageMetaData,
                         "@stylesheets": renderedStylesheets,
-
-                        "bb-types": {
-                            // TODO: get rid of this workaround
-                            /* eslint-disable-next-line @typescript-eslint/naming-convention */
-                            Plugin: "Plugin",
-                        },
                     },
                 },
             },

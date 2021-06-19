@@ -15,7 +15,27 @@
         "require-jsdoc": "off",
         "no-undef": "off",
         "no-unused-vars": "off",
-        "@typescript-eslint/naming-convention": "error",
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "default",
+                "format": ["strictCamelCase"],
+                "leadingUnderscore": "allow"
+            },
+            {
+                "selector": "variable",
+                "format": ["strictCamelCase", "UPPER_CASE"],
+                "leadingUnderscore": "allow"
+            },
+            {
+                "selector": "typeLike",
+                "format": ["PascalCase"]
+            },
+            {
+                "selector": "enumMember",
+                "format": ["StrictPascalCase"]
+            }
+        ],
         "@typescript-eslint/no-unused-vars": [
             "error",
             {

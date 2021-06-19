@@ -35,10 +35,12 @@ Now the big question is should mouseless support macros?
 
 ### Config and File Format
 
-Configuration file will be a `.mouselessrc` or `$HOME/.config/Blockbench/mouseless.mlv`.
+Configuration file will be a `.mouselessrc` or `$HOME/.config/Blockbench/mouseless.js`.
 
-This will introduce a custom file format, MLV (MouseLess Vi).
-The syntax will resemble Vimscript with less features but some keywords and options are yet to be determined.
+~~This will introduce a custom file format, MLV (MouseLess Vi).
+The syntax will resemble Vimscript with less features but some keywords and options are yet to be determined.~~
+
+The configuration file will be in Javascript to allow complete access to the app's state.
 
 Thoughts:
 

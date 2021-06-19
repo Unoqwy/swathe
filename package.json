@@ -8,7 +8,7 @@
         "lint": "eslint . --ext js,ts",
         "style": "yarn prettier . -w && yarn lint",
         "bundle": "rm -rf ./dist && spack && rm ./dist/*.map && node ./scripts/post-bundle.js",
-        "dev": "yarn tsc-check && yarn style && yarn bundle"
+        "dev": "yarn tsc-check && yarn bundle"
     },
     "dependencies": {},
     "devDependencies": {
