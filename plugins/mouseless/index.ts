@@ -114,7 +114,7 @@ abstract class Operator {
     abstract exec(motionCount: number, motion: string): void;
 }
 
-const specialKeys = ["Tab"];
+const specialKeys = ["Tab", "Space"];
 
 class MLV {
     readonly operators: Record<string, Operator> = {};
@@ -141,10 +141,11 @@ class MLV {
                 return this.clearInputStack();
             }
             input.appendToTrail(key);
-        } else if ((key !== "<" && key !== ">") && (/^[\x00-\x7F]$/.test(key) || specialKeys.includes(key))) {
+        } else if (key !== "<" && key !== ">" && (/^[\x22-\x7F]$/.test(key) || specialKeys.includes(key))) {
+            // \x22: -> exlamation mark ignore, and space (\x21) is a special char
             if (input.at === InputStackStep.MotionCount) {
                 const motionCount = parseFloat(input.trail);
-                if (motionCount !== NaN) {
+                if (!isNaN(motionCount)) {
                     input.op.motionCount = motionCount;
                 }
                 input.trail = undefined;

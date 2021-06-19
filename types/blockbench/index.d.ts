@@ -12,5 +12,5 @@ declare const currentwindow: any;
 // TOOD: add a wrapper around blockbench globals so that they are namespaced
 
 declare function moveElementsInSpace(difference: number, axis: 0 | 1 | 2): void;
-declare function rotateOnAxis(modify: (current: number) => number, axis: 0 |1 | 2, slider?: boolean): void;
+declare function rotateOnAxis(modify: (current: number) => number, axis: 0 | 1 | 2, slider?: boolean): void;
 declare function resizeWindow(event?: any): void;
