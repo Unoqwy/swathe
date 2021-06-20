@@ -9,7 +9,12 @@ namespace Mouseless {
     export let vimode = false;
 }
 
-let viLine: HTMLDivElement;
+let statusLine: {
+    root: HTMLDivElement,
+
+    state: HTMLSpanElement,
+    input: HTMLSpanElement,
+};
 let lastCapturedEvent: KeyboardEvent;
 
 const plugin = new SwathePlugin(
@@ -45,15 +50,25 @@ const plugin = new SwathePlugin(
                 lastCapturedEvent = undefined;
             });
 
-            viLine = document.createElement("div");
-            viLine.id = "vi-line";
+            const viLine = document.createElement("div");
+            viLine.id = "mouseless-line";
+            const stateSpan = document.createElement("span");
+            viLine.appendChild(stateSpan);
+            const inputSpan = document.createElement("span");
+            inputSpan.id = "mlv-input";
+            viLine.appendChild(inputSpan);
             $("#status_bar").prepend(viLine);
+            statusLine = {
+                root: viLine,
+                state: stateSpan,
+                input: inputSpan,
+            };
             toggleHook();
         },
         onunload: () => {
             removeFromArray((Keybinds as any).capture, captureKeys);
             $(document).off(".mouseless");
-            $(viLine).remove();
+            $(statusLine.root).remove();
         },
     },
     { storage: true }
@@ -63,8 +78,8 @@ plugin.register(true, {
 });
 
 function toggleHook() {
-    if (viLine !== undefined) {
-        viLine.innerHTML = "Vi-mode: " + (Mouseless.vimode ? "on" : "off");
+    if (statusLine !== undefined) {
+        statusLine.state.innerHTML = "Vi-mode: " + (Mouseless.vimode ? "on" : "off");
     }
 }
 
@@ -99,6 +114,7 @@ enum InputStackStep {
 class InputStack {
     at: InputStackStep;
 
+    stack?: string;
     trail?: string;
     op: {
         operator?: Operator;
@@ -112,6 +128,7 @@ class InputStack {
 
     reset() {
         this.at = InputStackStep.None;
+        this.stack = undefined;
         this.trail = undefined;
         delete this.op.operator;
         delete this.op.motionCount;
@@ -122,6 +139,11 @@ class InputStack {
             this.trail = value;
         } else {
             this.trail += value;
+        }
+        if (this.stack === undefined) {
+            this.stack = value;
+        } else {
+            this.stack += value;
         }
     }
 }
@@ -152,11 +174,16 @@ class MLV {
         if (input.at === InputStackStep.MotionCount && /^[+-.0-9]$/.test(key)) {
             if (
                 (input.trail !== undefined && (key === "+" || key === "-")) || // minus/plus can only be at the beginning
-                (key === "." && input.trail?.indexOf(".") !== -1) // dot cannot lead nor have a sibling
+                (key === "." && (input.trail !== undefined && input.trail.indexOf(".") !== -1)) // dot cannot have a sibling
             ) {
                 return this.clearInputStack();
             }
-            input.appendToTrail(key);
+
+            if (key === "." && (input.trail === undefined || input.trail === "-")) {
+                this.appendToTrail("0.");
+            } else {
+                this.appendToTrail(key);
+            }
         } else if (key !== "<" && key !== ">" && (/^[\x22-\x7F]$/.test(key) || specialKeys.includes(key))) {
             // \x22.. -> exlamation mark (\x21) ignore, and space (\x20) is a special char
             if (input.at === InputStackStep.MotionCount) {
@@ -172,7 +199,7 @@ class MLV {
             if (event.ctrlKey) {
                 append = "<C-" + append + ">";
             }
-            input.appendToTrail(append);
+            this.appendToTrail(append);
 
             if (input.at === InputStackStep.None || input.at === InputStackStep.Operator) {
                 const operator = this.checkAndReserveInputKind(this.operators, InputStackStep.Operator);
@@ -181,9 +208,17 @@ class MLV {
                     input.at = InputStackStep.MotionCount;
                 }
             } else if (input.at === InputStackStep.Motion) {
-                // TODO: actually support motions...
+                // TODO(priority 1): actually support motions...
+                if (key === "s" || key === "n") { // very ugly solution will be fixed with TODO above
+                    return;
+                }
+
                 if (key === "x" || key === "y" || key === "z") {
-                    input.op.operator.exec(input.op.motionCount ?? 1, key);
+                    input.op.operator.exec(input.op.motionCount ?? 1, input.trail);
+                } else if  (key === "a") {
+                    ["x", "y", "z"].forEach(axis => {
+                        input.op.operator.exec(input.op.motionCount ?? 1, input.trail.slice(0, -1) + axis);
+                    });
                 }
                 return this.clearInputStack();
             }
@@ -218,8 +253,14 @@ class MLV {
         }
     }
 
+    appendToTrail(input: string) {
+        this.#inputStack.appendToTrail(input);
+        statusLine.input.innerHTML = "· " + this.#inputStack.stack;
+    }
+
     clearInputStack() {
         this.#inputStack.reset();
+        statusLine.input.innerHTML = "";
     }
 }
 
@@ -247,9 +288,14 @@ function editSelected(title: string, makeEdit: (elements: any[]) => boolean | vo
 }
 
 const AXIS = ["x", "y", "z"];
+type Axis = 0 | 1 | 2;
 
-function moveSelected(step: number, axis: "x" | "y" | "z") {
-    moveElementsInSpace(step, AXIS.indexOf(axis) as 0 | 1 | 2);
+function getAxis(name: string): Axis {
+    return AXIS.indexOf(name) as Axis;
+}
+
+function moveSelected(step: number, axis: Axis) {
+    moveElementsInSpace(step, axis);
 }
 
 const mlv = new MLV();
@@ -266,10 +312,29 @@ function op(name: string, exec: (motionCount: number, motion: string) => void) {
 }
 
 op("m", (rel, axis) => {
-    editSelected("Move", () => moveSelected(rel, axis as "x" | "y" | "z"));
+    editSelected("Move", () => moveSelected(rel, getAxis(axis)));
 });
 op("r", (rel, axis) => {
-    editSelected("Rotate", () => rotateOnAxis(n => n + rel, AXIS.indexOf(axis) as 0 | 1 | 2));
+    editSelected("Rotate", () => rotateOnAxis(n => n + rel, getAxis(axis)));
+});
+op("s", (rel, input) => {
+    // still needing a  workaround, actual motions are really needed
+    const heading = input.length === 2 ? input[0] : undefined;
+    const axis = input.slice(-1);
+    console.log(heading, axis);
+    editSelected("Resize", elements => {
+        elements.forEach(element => {
+            if (!element.resizable) {
+                return;
+            }
+            if (heading === undefined || heading === "n") {
+                element.resize((n: number) => n + rel, getAxis(axis), false, false);
+            }
+            if (heading === undefined || heading === "s") {
+                element.resize((n: number) => n + -rel, getAxis(axis), true, false);
+            }
+        })
+    });
 });
 
 mlv.keybindings["u"] = () => Undo.undo();
