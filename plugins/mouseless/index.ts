@@ -10,10 +10,10 @@ namespace Mouseless {
 }
 
 let statusLine: {
-    root: HTMLDivElement,
+    root: HTMLDivElement;
 
-    state: HTMLSpanElement,
-    input: HTMLSpanElement,
+    state: HTMLSpanElement;
+    input: HTMLSpanElement;
 };
 let lastCapturedEvent: KeyboardEvent;
 
@@ -174,7 +174,7 @@ class MLV {
         if (input.at === InputStackStep.MotionCount && /^[+-.0-9]$/.test(key)) {
             if (
                 (input.trail !== undefined && (key === "+" || key === "-")) || // minus/plus can only be at the beginning
-                (key === "." && (input.trail !== undefined && input.trail.indexOf(".") !== -1)) // dot cannot have a sibling
+                (key === "." && input.trail !== undefined && input.trail.indexOf(".") !== -1) // dot cannot have a sibling
             ) {
                 return this.clearInputStack();
             }
@@ -209,13 +209,14 @@ class MLV {
                 }
             } else if (input.at === InputStackStep.Motion) {
                 // TODO(priority 1): actually support motions...
-                if (key === "s" || key === "n") { // very ugly solution will be fixed with TODO above
+                if (key === "s" || key === "n") {
+                    // very ugly solution will be fixed with TODO above
                     return;
                 }
 
                 if (key === "x" || key === "y" || key === "z") {
                     input.op.operator.exec(input.op.motionCount ?? 1, input.trail);
-                } else if  (key === "a") {
+                } else if (key === "a") {
                     ["x", "y", "z"].forEach(axis => {
                         input.op.operator.exec(input.op.motionCount ?? 1, input.trail.slice(0, -1) + axis);
                     });
@@ -333,7 +334,7 @@ op("s", (rel, input) => {
             if (heading === undefined || heading === "s") {
                 element.resize((n: number) => n + -rel, getAxis(axis), true, false);
             }
-        })
+        });
     });
 });
 
