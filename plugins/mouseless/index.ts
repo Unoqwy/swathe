@@ -1,5 +1,6 @@
 // FIXME: split this file
 
+import { mouselessStylesheet } from "@stylesheets";
 import { SwathePlugin } from "../../core/plugin";
 import { removeFromArray } from "../../core/utils";
 import { onlyModifiers } from "./keyboard";
@@ -8,6 +9,7 @@ namespace Mouseless {
     export let vimode = false;
 }
 
+let viLine: HTMLDivElement;
 let lastCapturedEvent: KeyboardEvent;
 
 const plugin = new SwathePlugin(
@@ -30,7 +32,7 @@ const plugin = new SwathePlugin(
                 click: () => {
                     const newState = (Mouseless.vimode = !Mouseless.vimode);
                     plugin.storage.set("vi-mode", newState || undefined);
-                    console.log("Toggled vi mode", newState ? "on" : "off");
+                    toggleHook();
                 },
             });
 
@@ -42,15 +44,29 @@ const plugin = new SwathePlugin(
                 }
                 lastCapturedEvent = undefined;
             });
+
+            viLine = document.createElement("div");
+            viLine.id = "vi-line";
+            $("#status_bar").prepend(viLine);
+            toggleHook();
         },
         onunload: () => {
             removeFromArray((Keybinds as any).capture, captureKeys);
             $(document).off(".mouseless");
+            $(viLine).remove();
         },
     },
     { storage: true }
 );
-plugin.register();
+plugin.register(true, {
+    stylesheet: mouselessStylesheet,
+});
+
+function toggleHook() {
+    if (viLine !== undefined) {
+        viLine.innerHTML = "Vi-mode: " + (Mouseless.vimode ? "on" : "off");
+    }
+}
 
 function captureKeys(jqueryEvent: any): boolean {
     if (!(jqueryEvent.originalEvent instanceof KeyboardEvent) || !Mouseless.vimode) {
