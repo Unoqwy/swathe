@@ -5,6 +5,9 @@ import { SwathePlugin } from "../../core/plugin";
 import { removeFromArray } from "../../core/utils";
 import { onlyModifiers } from "./keyboard";
 
+import * as sourceStd from "./std/std.js";
+import * as sourceDefaults from "./std/defaults.js";
+
 namespace Mouseless {
     export let vimode = false;
 }
@@ -263,7 +266,37 @@ class MLV {
         this.#inputStack.reset();
         statusLine.input.innerHTML = "";
     }
+
+    source(_sourceFile: string, sourceFn: () => void) {
+        const scope = this;
+        function map(mappings: Mappings, prefix?: string) {
+            Object.entries(mappings).forEach(([keybinding, fn]) => {
+                if (prefix !== undefined) {
+                    keybinding = prefix + keybinding;
+                }
+                if (typeof fn === "function") {
+                    scope.keybindings[keybinding] = fn;
+                } else if (typeof fn === "string") {
+                    map(mappings, prefix !== undefined ? prefix + keybinding : keybinding);
+                }
+            });
+        }
+
+        const sourceUtils = {
+            map: map,
+            action: actionBinding,
+        };
+        sourceFn.bind(sourceUtils)();
+    }
 }
+
+type Mappings = Record<string, () => void | Mappings>;
+
+const actionBinding = new Proxy({}, {
+    get: (_: any, property: string) => function() {
+        (BarItems[property] as any).click();
+    },
+});
 
 function edit(title: string, affects: any, makeEdit: () => boolean | void) {
     // TYPINGS: affects
@@ -338,13 +371,5 @@ op("s", (rel, input) => {
     });
 });
 
-mlv.keybindings["u"] = () => Undo.undo();
-mlv.keybindings["<C-r>"] = () => Undo.redo();
-mlv.keybindings["dd"] = () => (BarItems.delete as any).click();
-mlv.keybindings["<C-n>"] = () => (BarItems.add_cube as any).click();
-mlv.keybindings["<C-d>"] = () => (BarItems.duplicate as any).click();
-mlv.keybindings["<Tab>"] = () => (BarItems.toggle_quad_view as any).click();
-
-mlv.keybindings["<C-h>"] = () => (BarItems.toggle_left_sidebar as any).click();
-mlv.keybindings["<C-l>"] = () => (BarItems.toggle_right_sidebar as any).click();
-mlv.keybindings["RL"] = () => (BarItems.reload_plugins as any).click();
+mlv.source("std", sourceStd);
+mlv.source("defaults", sourceDefaults);
