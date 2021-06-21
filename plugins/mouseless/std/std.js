@@ -6,7 +6,7 @@ mapping coming from here shouldn't be overwritten, but you do you.
 See 'defaults.js' for default mappings which are not considered to be std.
 */
 
-module.exports = function() {
+module.exports = function () {
     const { map, action } = this;
 
     map({
@@ -15,4 +15,4 @@ module.exports = function() {
 
         "dd": action.delete,
     });
-}
+};

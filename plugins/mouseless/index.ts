@@ -292,8 +292,9 @@ class MLV {
 
 type Mappings = Record<string, () => void | Mappings>;
 
+// prettier-ignore
 const actionBinding = new Proxy({}, {
-    get: (_: any, property: string) => function() {
+    get: (_: any, property: string) => function () {
         (BarItems[property] as any).click();
     },
 });

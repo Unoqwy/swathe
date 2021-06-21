@@ -4,7 +4,7 @@ trying to keep some common habits with native keybindings.
 Feel free to override them.
 */
 
-module.exports = function() {
+module.exports = function () {
     const { map, action } = this;
 
     map({
@@ -14,4 +14,4 @@ module.exports = function() {
 
         "<Tab>": action.toggle_quad_view,
     });
-}
+};

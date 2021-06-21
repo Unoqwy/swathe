@@ -3,6 +3,7 @@
     "trailingComma": "es5",
     "arrowParens": "avoid",
     "printWidth": 120,
+    "quoteProps": "consistent",
     "overrides": [
         {
             "files": "*.{json,yml}",
