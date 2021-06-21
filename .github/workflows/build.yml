@@ -33,4 +33,5 @@ jobs:
           REPO: self
           BRANCH: dist
           FOLDER: dist
+          SKIP_EMPTY_COMMITS: "true"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
