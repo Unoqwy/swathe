@@ -4,6 +4,9 @@ const path = require("path");
 const sass = require("sass");
 const formatTime = require("pretty-ms");
 
+const { camelCase } = require("camel-case");
+const { snakeCase } = require("snake-case");
+
 const packageMetaData = Object.fromEntries(
     Object.entries(require("./package.json"))
         .filter(([_, val]) => typeof val === "string")
@@ -28,7 +31,7 @@ for (const [name, dir] of packPlugins) {
         process.exit(1);
     }
 
-    spackEntries[name] = entry;
+    spackEntries[snakeCase(name)] = entry;
 
     const stylesheet = path.join(dir, "css", "index.scss");
     if (fs.existsSync(stylesheet)) {
@@ -37,7 +40,7 @@ for (const [name, dir] of packPlugins) {
             outputStyle: "compressed",
             sourceMap: false,
         });
-        renderedStylesheets[`${name}Stylesheet`] = JSON.stringify(cssRendered.css.toString());
+        renderedStylesheets[`${camelCase(name)}Stylesheet`] = JSON.stringify(cssRendered.css.toString());
         renderingTotalTime += cssRendered.stats.duration;
     }
 }
