@@ -97,7 +97,9 @@ export class SwathePlugin {
         this.#actions.forEach(unloadAction);
     }
 
-    createAction(id: string, opts: ActionOptions) {
-        this.#actions.push(new Action(id, opts));
+    createAction(id: string, opts: ActionOptions): Action {
+        const action = new Action(id, opts);
+        this.#actions.push(action);
+        return action;
     }
 }
