@@ -1,4 +1,4 @@
-/*
+/**
  * Remove an element from `array` and returns the index it had or -1 if the lement wasn't present.
  */
 function indexedRemoveFromArray<T>(array: T[], element: T): number {
@@ -9,7 +9,7 @@ function indexedRemoveFromArray<T>(array: T[], element: T): number {
     return index;
 }
 
-/*
+/**
  * Try to remove an element from `array` and returns whether it was succesful.
  */
 export function removeFromArray<T>(array: T[], element: T): boolean {
