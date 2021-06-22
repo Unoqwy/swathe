@@ -2,7 +2,6 @@
 
 import { mouselessStylesheet } from "@stylesheets";
 import { SwathePlugin } from "../../core/plugin";
-import { removeFromArray } from "../../core/utils";
 import { onlyModifiers } from "./keyboard";
 
 import * as sourceStd from "./std/std.js";
@@ -31,7 +30,7 @@ const plugin = new SwathePlugin(
 
         onload: () => {
             Mouseless.vimode = plugin.storage.get("vi-mode");
-            (Keybinds as any).capture.push(captureKeys);
+            Blockbench.on("press_key" as any, captureKeys);
 
             plugin.createAction("toggle_vi_mode", {
                 name: "Toggle vi mode",
@@ -69,7 +68,7 @@ const plugin = new SwathePlugin(
             toggleHook();
         },
         onunload: () => {
-            removeFromArray((Keybinds as any).capture, captureKeys);
+            (Blockbench as any).removeListener("press_key", captureKeys);
             $(document).off(".mouseless");
             $(statusLine.root).remove();
         },
@@ -86,21 +85,22 @@ function toggleHook() {
     }
 }
 
-function captureKeys(jqueryEvent: any): boolean {
-    if (!(jqueryEvent.originalEvent instanceof KeyboardEvent) || !Mouseless.vimode) {
+function captureKeys(dispatchedEvent: any): boolean {
+    const { event, input_in_focus: inputInFocus, capture } = dispatchedEvent;
+    console.log(event, inputInFocus, capture);
+    if (!(event instanceof KeyboardEvent) || !Mouseless.vimode || inputInFocus) {
         return false;
     }
 
-    const event: KeyboardEvent = jqueryEvent.originalEvent;
     if (event.ctrlKey && event.shiftKey && event.key === "I") {
         currentwindow.toggleDevTools();
-        return true;
+        return capture();
     }
 
     if (open_menu !== undefined) {
         lastCapturedEvent = event;
     }
-    return true;
+    return capture();
 }
 
 enum InputStackStep {
