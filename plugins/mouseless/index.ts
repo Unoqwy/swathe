@@ -87,7 +87,6 @@ function toggleHook() {
 
 function captureKeys(dispatchedEvent: any): boolean {
     const { event, input_in_focus: inputInFocus, capture } = dispatchedEvent;
-    console.log(event, inputInFocus, capture);
     if (!(event instanceof KeyboardEvent) || !Mouseless.vimode || inputInFocus) {
         return false;
     }
@@ -356,7 +355,6 @@ op("s", (rel, input) => {
     // still needing a  workaround, actual motions are really needed
     const heading = input.length === 2 ? input[0] : undefined;
     const axis = input.slice(-1);
-    console.log(heading, axis);
     editSelected("Resize", elements => {
         elements.forEach(element => {
             if (!element.resizable) {
