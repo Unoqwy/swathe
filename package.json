@@ -10,7 +10,9 @@
         "bundle": "rm -rf ./dist && spack && rm ./dist/*.map && node ./scripts/post-bundle.js",
         "dev": "yarn tsc-check && yarn bundle"
     },
-    "dependencies": {},
+    "dependencies": {
+        "chokidar": "^3.5.2"
+    },
     "devDependencies": {
         "@swc/cli": "^0.1.46",
         "@swc/core": "^1.2.60",
