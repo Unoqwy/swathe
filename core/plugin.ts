@@ -42,6 +42,7 @@ export class SwathePlugin {
 
         this.id = id;
         options.about = (options.about ? options.about + "<br/>" : "") + aboutFooter;
+        options.min_version = options.min_version ?? "3.9";
         this.options = options;
         if (initOpts?.storage) {
             this.storage = Storage.load("swathe_" + id);
@@ -59,7 +60,7 @@ export class SwathePlugin {
             this.registerEvent("onload", { before: () => this.hook(hookOpts), after: this.postInit.bind(this) });
             this.registerEvent("onunload", { after: this.unhook.bind(this) });
         }
-        BBPlugin.register(this.id, this.options);
+        (Plugin as any).register(this.id, this.options);
     }
 
     private registerEvent(event: FunctionProperties<BBPluginOptions>, opts?: RegisterEventOptions) {
@@ -93,7 +94,9 @@ export class SwathePlugin {
 
     unhook() {
         this.styleElement?.remove();
-        this.#actions.forEach(unloadAction);
+        if (Blockbench.isNewerThan("3.8")) {
+            this.#actions.forEach(unloadAction);
+        }
     }
 
     createAction(id: string, opts: ActionOptions): Action {

@@ -19,6 +19,7 @@ const plugin = new SwathePlugin(
         author: "Unoqwy",
         description: "Write custom CSS using your editor of choice",
         variant: "desktop",
+        min_version: "3.8",
 
         onload: () => {
             updateState(plugin.storage.get("watching") === true, plugin.storage.get("watch_file"), "init");
