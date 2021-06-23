@@ -1,3 +1,4 @@
+import { existsSync, readFile } from "fs";
 import { FSWatcher, watch as fsWatch } from "chokidar";
 
 import { SwathePlugin } from "../../core/plugin";
@@ -20,10 +21,7 @@ const plugin = new SwathePlugin(
         variant: "desktop",
 
         onload: () => {
-            if (plugin.storage.get("watching")) {
-                toggleWatch(true);
-            }
-            CSSCompanion.watchFile = plugin.storage.get("watch_file");
+            updateState(plugin.storage.get("watching") === true, plugin.storage.get("watch_file"), "init");
 
             settingsDialog = new Dialog({
                 id: "css_companion_settings",
@@ -31,14 +29,18 @@ const plugin = new SwathePlugin(
                 form: {
                     watching: {
                         label: "Watching",
-                        description: "Whether the CSS is currently being watched and replicated in realtime",
+                        description:
+                            "Whether the CSS is currently being watched and" +
+                            "synced with with current theme in realtime",
                         type: "checkbox",
                         value: CSSCompanion.watching,
                         condition: (form: any) => form.file !== undefined,
                     },
                     file: {
                         label: "Watch file",
-                        description: "The file to watch. It must be a .css file, if you wish to use a preprocessor make sure it automatically transpiles to css.",
+                        description:
+                            "The file to watch. It must be a .css file, if you wish to use " +
+                            "a preprocessor make sure it automatically transpiles to css",
                         type: "file",
                         extensions: ["css"],
                         filetype: "CSS Stylesheet",
@@ -47,12 +49,7 @@ const plugin = new SwathePlugin(
                 },
                 buttons: ["Close"],
                 onFormChange: (form: any) => {
-                    toggleWatch(form.watching, CSSCompanion.watchFile !== form.file);
-                    CSSCompanion.watchFile = form.file;
-                    plugin.storage.set(
-                        "watch_file",
-                        CSSCompanion.watchFile?.length > 0 ? CSSCompanion.watchFile : undefined
-                    );
+                    updateState(form.watching, form.file, "dialog");
                 },
                 onCancel: () => {
                     settingsDialog.hide();
@@ -67,6 +64,11 @@ const plugin = new SwathePlugin(
             MenuBar.addAction(openAction, "file.preferences");
         },
         onunload: () => {
+            if (watcher !== undefined) {
+                watcher.close();
+                watcher = undefined;
+            }
+
             MenuBar.removeAction("file.preferences.css_companion_window");
             (settingsDialog.hide() as any).delete();
         },
@@ -77,29 +79,50 @@ const plugin = new SwathePlugin(
 );
 plugin.register();
 
-function fileUpdate(filePath) {
-    console.log(filePath, CSSCompanion.watchFile);
-//     if (filePath !== CSSCompanion.watchFile) {
-// 
-//     }
+function fileUpdate(filePath: string) {
+    if (filePath !== CSSCompanion.watchFile) {
+        return;
+    }
+
+    if (existsSync(filePath)) {
+        readFile(filePath, "utf-8", (err, data) => {
+            if (err) {
+                return console.error(err);
+            }
+            CustomTheme.data.css = data.toString();
+        });
+    }
 }
 
-function toggleWatch(watch?: boolean, force?: boolean) {
-    const previousState = CSSCompanion.watching;
-    const watching = (CSSCompanion.watching = watch ?? !CSSCompanion.watching);
-    if (settingsDialog !== undefined) {
-        (settingsDialog as any).form.watching.value = watching;
+function updateState(watching: boolean, watchFile: string, from: "init" | "dialog") {
+    if (watchFile?.length === 0) {
+        watchFile = undefined;
     }
-    plugin.storage.set("watching", watching ? true : undefined);
 
-    if (previousState !== watching || force) {
+    const previousWatchingState = CSSCompanion.watching;
+    const previousFile = CSSCompanion.watchFile;
+
+    CSSCompanion.watching = watching;
+    CSSCompanion.watchFile = watchFile;
+    if (from !== "init") {
+        plugin.storage.set("watching", watching ? true : undefined);
+        plugin.storage.set("watch_file", watchFile);
+    }
+    if (from === "dialog" && settingsDialog !== undefined) {
+        (settingsDialog as any).form.watching.value = watching;
+        (settingsDialog as any).form.file.value = watchFile;
+    }
+
+    if (previousWatchingState !== watching || previousFile !== watchFile) {
         if (watcher !== undefined) {
             watcher.close();
             watcher = undefined;
+            console.log("CSS Companion has stopped watching for changes.");
         }
-        if (watching && CSSCompanion.watchFile !== undefined) {
+        if (watching && watchFile !== undefined) {
             watcher = fsWatch(CSSCompanion.watchFile);
             watcher.on("add", fileUpdate).on("change", fileUpdate).on("unlink", fileUpdate);
+            console.log("CSS Companion is watching file for changes..");
         }
     }
 }
