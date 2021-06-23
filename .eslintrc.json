@@ -23,6 +23,14 @@
                 "leadingUnderscore": "allow"
             },
             {
+                "selector": "property",
+                "filter": {
+                    "regex": "^(min|max)_version$",
+                    "match": true
+                },
+                "format": ["snake_case"]
+            },
+            {
                 "selector": "variable",
                 "format": ["strictCamelCase", "UPPER_CASE"],
                 "leadingUnderscore": "allow"
