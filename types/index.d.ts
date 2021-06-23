@@ -1,4 +1,1 @@
-declare module "@stylesheets" {
-    const stretchStylesheet: string;
-    const mouselessStylesheet: string;
-}
+declare const pluginStylesheet: string;

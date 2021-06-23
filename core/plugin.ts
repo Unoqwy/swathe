@@ -1,9 +1,8 @@
-import { repository } from "@package-info";
 import { injectStylesheet } from "./inject";
 import { Storage } from "./storage";
 import { unloadAction } from "./unstable";
 
-const aboutFooter = `This plugin is part of the <a href='${repository}'>Swathe</a> plugin collection.`;
+const aboutFooter = `This plugin is part of the <a href='https://github.com/Unoqwy/swathe'>Swathe</a> plugin collection.`;
 
 type PluginInitOptions = {
     /** Whether the plugin requires a storage */

@@ -1,6 +1,5 @@
 // FIXME: split this file
 
-import { mouselessStylesheet } from "@stylesheets";
 import { SwathePlugin } from "../../core/plugin";
 import { onlyModifiers } from "./keyboard";
 
@@ -76,7 +75,7 @@ const plugin = new SwathePlugin(
     { storage: true }
 );
 plugin.register(true, {
-    stylesheet: mouselessStylesheet,
+    stylesheet: pluginStylesheet,
 });
 
 function toggleHook() {

@@ -9,6 +9,7 @@
             "./node_modules/blockbench-types"
         ],
         "resolveJsonModule": true,
+        "skipLibCheck": true,
         "paths": {
             "@package-info": ["./package.json"]
         },
