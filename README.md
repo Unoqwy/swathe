@@ -3,7 +3,7 @@
 ## Plugins
 
 | Plugin        | About                                        | Links                                                                     |
-| ---           | ---                                          | ---                                                                       |
+| ------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | CSS Companion | Sync a CSS file to edit a theme in real-time | [usage][cc-readme] [download][cc-cdn] · [source](./plugins/css-companion) |
 
 [cc-readme]: ./plugins/css-companion/README.md
@@ -20,7 +20,7 @@ The download link of a plugin will therefore always be up to date with the sourc
 
 #### Need to update?
 
-If you want to update a plugin you already installed to the latest version, 
+If you want to update a plugin you already installed to the latest version,
 go back to `File -> Plugins`, and click `Reload` next to the plugin.
 
 ## Project Structure
