@@ -11,6 +11,8 @@ const sass = require("sass");
 const tsify = require("tsify");
 const uglify = require("uglify-js");
 
+const performance = require("perf_hooks").performance;
+
 function formatTime(millis) {
     return prettyMillis(millis, { secondsDecimalDigits: 2 });
 }
@@ -52,7 +54,7 @@ if (renderedStylesheetCount > 0) {
 fs.mkdirSync("dist", { recursive: true });
 
 async function bundlePlugin([pluginName, pluginPath]) {
-    const name = pluginName.replaceAll("-", "_");
+    const name = pluginName.replace(/-/g, "_");
     const startAt = performance.now();
 
     const bundler = browserify(path.join(pluginPath, "index.ts"), {
@@ -90,3 +92,7 @@ async function bundlePlugin([pluginName, pluginPath]) {
         })
     );
 })();
+
+process.on("unhandledRejection", error => {
+    throw error;
+});
