@@ -5,9 +5,17 @@
 | Plugin        | About                                        | Links                                                                     |
 | ------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | CSS Companion | Sync a CSS file to edit a theme in real-time | [usage][cc-readme] [download][cc-cdn] · [source](./plugins/css-companion) |
+| Mouseless¹    | Vi-like keybindings to edit models           | [download][ml-cdn] · [source](./plugins/mouseless)                        |
+| Stretch       | Add missing actions to control screen space  | [download][sh-cdn] · [source](./plugins/stretch)                          |
+
+¹ Mouseless is an experimental plugin and is not ready to be used yet.
 
 [cc-readme]: ./plugins/css-companion/README.md
-[cc-cdn]: https://cdn.jsdelivr.net/gh/Unoqwy/blockbench-mouseless@dist/css_companion.js
+[cc-cdn]: https://cdn.jsdelivr.net/gh/Unoqwy/swathe@dist/css_companion.js
+[ml-readme]: ./plugins/mouseless/README.md
+[ml-cdn]: https://cdn.jsdelivr.net/gh/Unoqwy/swathe@dist/mouseless.js
+[sh-readme]: ./plugins/stretch/README.md
+[sh-cdn]: https://cdn.jsdelivr.net/gh/Unoqwy/swathe@dist/stretch.js
 
 A bundled version of each plugin is automatically deployed on the [dist](https://github.com/Unoqwy/blockbench-mouseless/tree/dist) branch.  
 The download link of a plugin will therefore always be up to date with the source code.
